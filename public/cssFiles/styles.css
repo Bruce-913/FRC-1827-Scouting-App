@@ -1,0 +1,39 @@
+#main-title {
+  text-align: center;
+}
+
+.nav { display:flex; gap:1rem; margin-bottom:1.25rem; }
+.nav a[aria-current="page"] { text-decoration: underline;}
+
+.nav {
+  display: flex;
+  align-items: center; 
+  gap: 1rem;
+  font-family: "Montserrat";
+  font-size: 25px;
+  justify-content: space-between;
+}
+
+
+.nav a:hover{
+  font-size: 33px;
+  transition: 0.5s;
+  /* background-color: #1bdd35; */
+
+  /* text-shadow: -3px -3px 0 #1bdd35, 3px -3px 0 #1bdd35, -3px 3px 0 #1bdd35, 3px 3px 0 #1bdd35; */
+}
+
+.nav a{
+  color: #111111;
+  letter-spacing: 1px;
+  transition: 0.5s;
+  text-decoration: none;
+  margin: 0px 5px;
+}
+/* 
+@media (prefers-color-scheme: dark) { 
+  .nav a{
+    color: white;
+  }
+} */
+
