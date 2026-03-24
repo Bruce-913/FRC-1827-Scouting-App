@@ -1,29 +1,26 @@
 const express = require('express');
 // const session = require('express-session');
 const path = require('path');
-// const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // // ===== SQLite setup =====
-// const db = new sqlite3.Database('./app.db');
-// db.serialize(() => {  
-//   // USERS TABLE
-//   db.run(`CREATE TABLE IF NOT EXISTS user_info (
-//     id TEXT PRIMARY KEY,
-//     firstName TEXT NOT NULL,
-//     lastName TEXT NOT NULL,
-//     email TEXT UNIQUE,
-//     username TEXT UNIQUE NOT NULL,
-//     password TEXT NOT NULL,
-//     gradeLevel INTEGER,
-//     schoolName TEXT,
-//     roles TEXT NOT NULL,
-//     status TEXT NOT NULL
-//     )`
-//   );
-// });
+const db = new sqlite3.Database('./app.db');
+db.serialize(() => {  
+  // USERS TABLE
+  db.run(`CREATE TABLE IF NOT EXISTS team_data (
+    driveTrain TEXT,
+    bumpCross TEXT,
+    underTrench TEXT,
+    pickupGround TEXT,
+    pickupPlayer TEXT,
+    hang TEXT,
+    hangAuto TEXT
+    )`
+  );
+});
 
 app.use(express.json());
 app.use(express.static('public'));
