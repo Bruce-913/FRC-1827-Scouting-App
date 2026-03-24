@@ -63,7 +63,6 @@ app.get('/teamSort', (_req, res) => {
 // ===== 404 =====
 app.use((req, res) => {
   res.status(404).send(page('Not Found', `<h1>404</h1><p>Page not found: ${req.path}</p><a href="/">Home</a>`));
-  console.log("why tf am i getting a damn error:", req.path)
 });
 
 // ===== Start =====
