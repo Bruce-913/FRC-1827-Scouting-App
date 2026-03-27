@@ -65,10 +65,17 @@ app.get('/teamSort', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/teamSort.html'))
 });
 
+app.get('/api/team_data', (req, res) => {
+  sql = `SELECT teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto
+  FROM team_data`
+  db.all(sql, [], (err, rows) => {
+    if (err) return res.status(500).json({ error: 'Database error' });
+    res.json(rows);
+  });
+});
+
 app.post('/scoutForm', (req, res) => {
-    console.log('req.body:', req.body);  // Check what is inside req.body
     const {teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto} = req.body;
-    console.log(teamName)
 
     db.run(
         `INSERT INTO team_data (teamName, teamNumber, robotDimensions,driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto)
