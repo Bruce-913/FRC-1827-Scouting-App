@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Login</title>
+        <title>Scouting</title>
         <link rel="stylesheet" href="cssFiles/styles.css" />
         <link rel="stylesheet" href="cssFiles/scouting.css" />
     </head>
@@ -15,9 +15,47 @@
             </div>
         </nav>
         <h1 id="main-title">Scouting Page</h1>
+        <form action="/scoutForm" method="POST" class="card">
+            <input type="text" name="teamName" placeholder="Team Name" required>
+            <input type="text" name="teamNumber" placeholder="Team Number" required>
+            <input type="text" name="robotDimensions" placeholder="Robot Dimensions:" required>
+            <input type="text" name="driveTrain" placeholder="What drivetrain is being used" required>
+            <select name="bumpCross" required>
+                <option value="">Can robot cross the bump</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <select name="underTrench" required>
+                <option value="">Can robot go under the trench</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <select name="pickupGround" required>
+                <option value="">Can robot pick up from ground</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <select name="pickupPlayer" required>
+                <option value="">Can robot pick up from human player</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <select name="hang" required>
+                <option value="">can it hang(which levels)</option>
+                <option value="No hang">Cannot hang</option>
+                <option value="L1">L1(low)</option>
+                <option value="L2">L2(mid)</option>
+                <option value="L3">L3(high)</option>
+            </select>
+            <select name="hangAuto" required>
+                <option value="">Can it hang in Auto</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+        <!-- <script>
 
-        <script>
-
-        </script>
+        </script> -->
     </body>
 </html>

@@ -11,6 +11,9 @@ const db = new sqlite3.Database('./app.db');
 db.serialize(() => {  
   // USERS TABLE
   db.run(`CREATE TABLE IF NOT EXISTS team_data (
+    teamName TEXT,
+    teamNumber TEXT, 
+    robotDimensions TEXT,
     driveTrain TEXT,
     bumpCross TEXT,
     underTrench TEXT,
@@ -22,6 +25,8 @@ db.serialize(() => {
   );
 });
 
+    /* Middleware*/
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -48,16 +53,45 @@ const page = (title, body) => `
 `;
 
     /* |Page Routing| */
-app.get('/', (_req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/homePage.html'))
 });
 
-app.get('/scouting', (_req, res) => {
+app.get('/scouting', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/scouting.html'))
 });
 
-app.get('/teamSort', (_req, res) => {
+app.get('/teamSort', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/teamSort.html'))
+});
+
+app.post('/scoutForm', (req, res) => {
+    console.log('req.body:', req.body);  // Check what is inside req.body
+    const {teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto} = req.body;
+    console.log(teamName)
+
+    db.run(
+        `INSERT INTO team_data (teamName, teamNumber, robotDimensions,driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+            teamName,
+            teamNumber,
+            robotDimensions,
+            driveTrain,
+            bumpCross,
+            underTrench,
+            pickupGround,
+            pickupPlayer,
+            hang,
+            hangAuto
+        ],
+        (err) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).send('Database error');}
+        res.redirect('/teamSort');
+        }
+    );
 });
 
 // ===== 404 =====
