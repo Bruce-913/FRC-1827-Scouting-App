@@ -1,6 +1,28 @@
 .card {
   background: var(--card);
+  background-color: #0a4061;
   padding: 1rem; border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px #214457;
 }
 
+input {
+  /* background-color: yellow; */
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+
+
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
