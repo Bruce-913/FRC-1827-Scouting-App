@@ -2,7 +2,7 @@ const express = require('express');
 // const session = require('express-session');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
-
+const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -11,6 +11,7 @@ const db = new sqlite3.Database('./app.db');
 db.serialize(() => {  
   // USERS TABLE
   db.run(`CREATE TABLE IF NOT EXISTS team_data (
+    id TEXT PRIMARY KEY,
     teamName TEXT,
     teamNumber TEXT, 
     robotDimensions TEXT,
@@ -42,9 +43,9 @@ const page = (title, body) => `
 <body>
   <nav class="nav">
     <div class="links">
-      <a href="/">Login</a>
-      <a href="/register">Register</a>
-      <a href="/dashboard">Dashboard</a>
+      <a href="/">Home</a>
+      <a href="/scouting">Scouting</a>
+      <a href="/teamSort">Teams</a>
     </div>
   </nav>
   ${body}
@@ -66,7 +67,7 @@ app.get('/teamSort', (req, res) => {
 });
 
 app.get('/api/team_data', (req, res) => {
-  sql = `SELECT teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto
+  sql = `SELECT id, teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto
   FROM team_data`
   db.all(sql, [], (err, rows) => {
     if (err) return res.status(500).json({ error: 'Database error' });
@@ -74,13 +75,41 @@ app.get('/api/team_data', (req, res) => {
   });
 });
 
+// Fetch single team data
+app.get('/api/team_data/:id', (req, res) => {
+  const id = req.params.id;
+  db.get('SELECT * FROM team_data WHERE id = ?', [id], (err, row) => {
+    if(err || !row) return res.status(404).json({ error: "Team not found" });
+    res.json(row);
+  });
+});
+
+// Update team
+app.post('/api/team_data/:id/update', (req, res) => {
+  const id = req.params.id;
+  const { teamName, coach } = req.body;
+  db.run('UPDATE team_data SET teamName = ?, coach = ? WHERE id = ?', [teamName, coach, id], err => {
+    if(err) return res.status(500).json({ error: 'Update failed' });
+    res.json({ success: true });
+  });
+});
+
+app.post('/api/team_data/:id/delete', (req, res) => {
+  const id = req.params.id;
+  db.run('DELETE FROM team_data WHERE id = ?', [id], err => {
+    if(err) return res.status(500).json({ error: 'Delete failed' });
+    res.json({ success: true });
+  });
+});
+
 app.post('/scoutForm', (req, res) => {
     const {teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto} = req.body;
 
     db.run(
-        `INSERT INTO team_data (teamName, teamNumber, robotDimensions,driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO team_data (id, teamName, teamNumber, robotDimensions,driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
+            crypto.randomUUID(),
             teamName,
             teamNumber,
             robotDimensions,

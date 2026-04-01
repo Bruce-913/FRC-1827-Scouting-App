@@ -51,7 +51,7 @@
   
   /* Table cell */
   .table-cell {
-    font-size: 15px;
-    font-family: "Poppins";
+    border-collapse: collapse;
+    width: 100%;
   }
   

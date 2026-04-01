@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Team Detail</title>
+  <link rel="stylesheet" href="cssFiles/styles.css">
+</head>
+<body>
+  <h1 id="teamName"></h1>
+  <div id="teamInfo"></div>
+
+  <h2>Edit Team</h2>
+  <form id="editForm">
+    <input type="text" name="teamName" id="editTeamName">
+    <input type="text" name="coach" id="editCoach">
+    <button type="submit">Save</button>
+  </form>
+
+  <button id="deleteBtn">Delete Team</button>
+  <a href="team-sort.html">Back to All Teams</a>
+
+  <script>
+    // 1. Get team name from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const teamId = urlParams.get('id');
+
+    // 2. Fetch team data from backend API
+    fetch(`/api/team_data/${encodeURIComponent(teamID)}`)
+      .then(res => res.json())
+      .then(team => {
+        document.getElementById('teamName').textContent = team.teamName;
+
+        const infoDiv = document.getElementById('teamInfo');
+        infoDiv.innerHTML = `
+          <p>Team Number: ${team.teamNumber}</p>
+          <p>Drive Train: ${team.driveTrain}</p>
+          <p>Bump Cross: ${team.bumpCross}</p>
+          <p>Under Trench: ${team.underTrench}</p>
+          <p>Pick up ground: ${team.pickupGround}</p>
+          <p>Pick up player: ${team.pickupPlayer}</p>
+          <p>Hang: ${team.hang}</p>
+          <p>Hang auto: ${team.hangAuto}</p>
+        `;
+
+        // Pre-fill edit form
+        document.getElementById('editTeamName').value = team.teamName;
+        document.getElementById('editCoach').value = team.coach;
+
+        // Handle form submission
+        document.getElementById('editForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          fetch(`/api/team_data/${team.id}/update`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              teamName: document.getElementById('editTeamName').value,
+              coach: document.getElementById('editCoach').value
+            })
+          }).then(res => {
+            if(res.ok) alert('Team updated!');
+          });
+        });
+
+        // Handle delete
+        document.getElementById('deleteBtn').addEventListener('click', () => {
+          if(!confirm('Are you sure?')) return;
+          fetch(`/api/team_data/${team.id}/delete`, { method: 'POST' })
+            .then(res => {
+              if(res.ok) window.location = 'team-sort.html';
+            });
+        });
+      });
+  </script>
+</body>
+</html>

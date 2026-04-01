@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8" />
         <title>Team Sort</title>
-        <link rel="stylesheet" href="cssFiles/styles.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">        <link rel="stylesheet" href="cssFiles/styles.css" />
         <link rel="stylesheet" href="cssFiles/teamSort.css" />
     </head>
     <body>
@@ -88,7 +90,10 @@
 
                 data.forEach(team => {
                     html += `
-                    <div class="container-row" data-id="${team.teamName}">
+                    <div class="container-row" data-id="${team.id}">
+                        <div class="table-cell">
+                            <a href = /team/${team.id}>${team.teamname}</a>
+                        </div
                         <div class="table-cell">${team.teamNumber}</div>
                         <div class="table-cell">${team.robotDimensions}</div>
                         <div class="table-cell">${team.driveTrain}</div>
@@ -99,7 +104,7 @@
                         <div class="table-cell status-cell">${team.hang}</div>
                         <div class="table-cell status-cell">${team.hangAuto}</div>
                         <div class="table-cell">
-                        <button class="btn edit-btn" data-id="${team.teamName}">Edit</button>
+                        <button class="btn edit-btn" data-id="${team.id}">Edit</button>
                         </div>
                     </div>
                     `;
