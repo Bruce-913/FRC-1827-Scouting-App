@@ -2,74 +2,230 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Team Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="cssFiles/styles.css">
+  <link rel="stylesheet" href="cssFiles/teamSort.css">
+  <link rel="stylesheet" href="cssFiles/team-details.css">
 </head>
 <body>
-  <h1 id="teamName"></h1>
-  <div id="teamInfo"></div>
+<nav class = "nav">
+  <div>
+    <a href="/">Home Page</a>
+    <a href="/scouting">Scouting</a>
+    <a href="/teamSort" aria-current="page">Team Sorting</a>
+  </div>
+  <!-- <a href="/teamSort">Back</a> -->
+</nav>  
+<h1 id="teamName-title"></h1>
+<div class="card">
+  <div class="container2">
 
-  <h2>Edit Team</h2>
-  <form id="editForm">
-    <input type="text" name="teamName" id="editTeamName">
-    <input type="text" name="coach" id="editCoach">
-    <button type="submit">Save</button>
-  </form>
+    <div id="teamDisplay">
+      <div class="table-title">ROBOT INFORMATION</div>
+      <div class="container-row1" id="teamInfo">
+        <div class="container-row">
+          <div class="table-cell row-name" >Team Name: </div>
+          <div class="table-cell" id="teamName"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Team Number: </div>
+          <div class="table-cell" id="teamNumber"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Robot Dimensions: </div>
+          <div class="table-cell" id="robotDimensions"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Drive Train: </div>
+          <div class="table-cell" id="driveTrain"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Can it cross the bump: </div>
+          <div class="table-cell" id="bumpCross"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Can it go under the trench: </div>
+          <div class="table-cell" id="underTrench"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Can it pick up from ground: </div>
+          <div class="table-cell" id="pickupGround"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Can it pick up from human player: </div>
+          <div class="table-cell" id="pickupPlayer"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Can it hang (tele-op) : </div>
+          <div class="table-cell" id="hang"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">Can it hang in Autonomous: </div>
+          <div class="table-cell" id="hangAuto"></div>
+        </div>
+      </div>
+    </div>
 
-  <button id="deleteBtn">Delete Team</button>
-  <a href="team-sort.html">Back to All Teams</a>
 
-  <script>
-    // 1. Get team name from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const teamId = urlParams.get('id');
+    <div id="editTeam" style="display: none;">
+      <div class="table-title">EDIT ROBOT INFORMATION</div>
+      <div class="container-row1">
+        <div class="container-row"><div class ="row-name">Team Name: </div><input type="text" id="editTeamName"></div>
+        <div class="container-row"><div class ="row-name">Team Number: </div><input type="text" id="editTeamNumber"></div>
+        <div class="container-row"><div class ="row-name">Robot Dimensions: </div><input type="text" id="editRobotDimensions"></div>
+        <div class="container-row"><div class ="row-name">Drive Train: </div><input type="text" id="editDriveTrain"></div>
+        <div class="container-row"><div class ="row-name">Cross Bump: </div>
+          <select id="editBumpCross">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="container-row"><div class ="row-name">Under Trench: </div>
+          <select id="editUnderTrench">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="container-row"><div class ="row-name">Pickup Ground: </div>
+          <select id="editPickupGround">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="container-row"><div class ="row-name">Pickup Player: </div>
+          <select id="editPickupPlayer">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="container-row"><div class ="row-name">Hang (tele-op): </div>
+          <select id="editHang">
+            <option value="No hang">No hang</option>
+            <option value="L1">L1 (low)</option>
+            <option value="L2">L2 (mid)</option>
+            <option value="L3">L3 (high)</option>
+          </select>
+        </div>
+        <div class="container-row"><div class ="row-name">Hang (auto): </div>
+          <select id="editHangAuto">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-    // 2. Fetch team data from backend API
-    fetch(`/api/team_data/${encodeURIComponent(teamID)}`)
-      .then(res => res.json())
-      .then(team => {
-        document.getElementById('teamName').textContent = team.teamName;
+    <button id="editBtn">Edit</button>
+    <button id="saveBtn" style="display:none;">Save</button>
+    <button id="cancelBtn" style="display:none;">Cancel</button>
+  </div>
+</div>
 
-        const infoDiv = document.getElementById('teamInfo');
-        infoDiv.innerHTML = `
-          <p>Team Number: ${team.teamNumber}</p>
-          <p>Drive Train: ${team.driveTrain}</p>
-          <p>Bump Cross: ${team.bumpCross}</p>
-          <p>Under Trench: ${team.underTrench}</p>
-          <p>Pick up ground: ${team.pickupGround}</p>
-          <p>Pick up player: ${team.pickupPlayer}</p>
-          <p>Hang: ${team.hang}</p>
-          <p>Hang auto: ${team.hangAuto}</p>
-        `;
+<script>
+  // get id from url
+  const params = new URLSearchParams(window.location.search);
+  const teamId = params.get('id');
 
-        // Pre-fill edit form
-        document.getElementById('editTeamName').value = team.teamName;
-        document.getElementById('editCoach').value = team.coach;
+  // constants for editing data
+  const editBtn = document.getElementById('editBtn')
+  const saveBtn = document.getElementById('saveBtn')
+  const cancelBtn = document.getElementById('cancelBtn')
 
-        // Handle form submission
-        document.getElementById('editForm').addEventListener('submit', (e) => {
-          e.preventDefault();
-          fetch(`/api/team_data/${team.id}/update`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              teamName: document.getElementById('editTeamName').value,
-              coach: document.getElementById('editCoach').value
-            })
-          }).then(res => {
-            if(res.ok) alert('Team updated!');
-          });
-        });
+  const teamDisplay = document.getElementById('teamDisplay')
+  const editTeam = document.getElementById('editTeam')
 
-        // Handle delete
-        document.getElementById('deleteBtn').addEventListener('click', () => {
-          if(!confirm('Are you sure?')) return;
-          fetch(`/api/team_data/${team.id}/delete`, { method: 'POST' })
-            .then(res => {
-              if(res.ok) window.location = 'team-sort.html';
-            });
-        });
-      });
-  </script>
+  let teamData = {}
+
+
+  // Load unique team data
+  fetch(`/api/team_data/${teamId}`)
+    .then(res => res.json())
+    .then(team => {
+      teamData = team
+      renderteamData()
+    });
+
+  function renderteamData() {
+    document.getElementById('teamName-title').textContent = teamData.teamName;
+    document.getElementById('teamName').textContent = teamData.teamName;
+    document.getElementById('teamNumber').textContent = teamData.teamNumber;
+    document.getElementById('robotDimensions').textContent = teamData.robotDimensions;
+    document.getElementById('driveTrain').textContent = teamData.driveTrain;
+    document.getElementById('bumpCross').textContent = teamData.bumpCross;
+    document.getElementById('underTrench').textContent = teamData.underTrench;
+    document.getElementById('pickupGround').textContent = teamData.pickupGround;
+    document.getElementById('pickupPlayer').textContent = teamData.pickupPlayer;
+    document.getElementById('hang').textContent = teamData.hang;
+    document.getElementById('hangAuto').textContent = teamData.hangAuto;
+  }
+  
+  editBtn.addEventListener('click', enableEdit)
+  saveBtn.addEventListener('click', saveChange)
+  cancelBtn.addEventListener('click', cancelChange)
+  
+  // freak this dang edit fn
+  function enableEdit() {
+    document.getElementById('editTeamName').value = teamData.teamName;
+    document.getElementById('editTeamNumber').value = teamData.teamNumber;
+    document.getElementById('editRobotDimensions').value = teamData.robotDimensions;
+    document.getElementById('editDriveTrain').value = teamData.driveTrain;
+    document.getElementById('editBumpCross').value = teamData.bumpCross;
+    document.getElementById('editUnderTrench').value = teamData.underTrench;
+    document.getElementById('editPickupGround').value = teamData.pickupGround;
+    document.getElementById('editPickupPlayer').value = teamData.pickupPlayer;
+    document.getElementById('editHang').value = teamData.hang;
+    document.getElementById('editHangAuto').value = teamData.hangAuto;
+
+    teamDisplay.style.display = 'none';
+    editTeam.style.display = 'block';
+
+    editBtn.style.display = 'none';
+    saveBtn.style.display = 'inline';
+    cancelBtn.style.display = 'inline';
+  }
+
+  function saveChange() {
+    const updatedTeam = {
+      teamName: document.getElementById('editTeamName').value,
+      teamNumber: document.getElementById('editTeamNumber').value,
+      robotDimensions: document.getElementById('editRobotDimensions').value,
+      driveTrain: document.getElementById('editDriveTrain').value,
+      bumpCross: document.getElementById('editBumpCross').value,
+      underTrench: document.getElementById('editUnderTrench').value,
+      pickupGround: document.getElementById('editPickupGround').value,
+      pickupPlayer: document.getElementById('editPickupPlayer').value,
+      hang: document.getElementById('editHang').value,
+      hangAuto: document.getElementById('editHangAuto').value,
+    };
+
+    fetch(`/api/team_data/${teamId}/update`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedTeam)
+    }).then(res => {
+      if (res.ok) {
+        teamData = {...teamData, ...updatedTeam};
+        cancelChange();
+        alert('Team updated as it should:)');
+      }
+    });
+  }
+
+  function cancelChange() {
+    editTeam.style.display = 'none'
+    teamDisplay.style.display = 'block'
+    editBtn.style.display = 'inline'
+    saveBtn.style.display = 'none'
+    cancelBtn.style.display = 'none'
+
+    renderteamData()
+  }
+
+</script>
+
 </body>
 </html>

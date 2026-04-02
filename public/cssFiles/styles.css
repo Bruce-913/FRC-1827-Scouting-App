@@ -3,6 +3,7 @@ body {
   font-family: "Orbitron";
   background: var(--bg); color: var(--fg);
   background-color: #002147;
+  color: #FFB915;
 }
 
 
@@ -14,11 +15,13 @@ body {
 .nav a[aria-current="page"] { text-decoration: underline;}
 
 .nav {
+  padding: 10px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center; 
   gap: 1rem;
   font-size: 25px;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 
@@ -44,7 +47,8 @@ body {
   }
 } */
 
-h1 {
-  color: #FFB915;
-  
+.card {
+  background-color: #002a47;
+  padding: 1rem; border-radius: 12px;
+  box-shadow: 0 2px 8px #214457;
 }

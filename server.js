@@ -1,12 +1,11 @@
 const express = require('express');
-// const session = require('express-session');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// // ===== SQLite setup =====
+//SQLite setup
 const db = new sqlite3.Database('./app.db');
 db.serialize(() => {  
   // USERS TABLE
@@ -31,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-    /* Helper */
+    /* Helpers */
 const page = (title, body) => `
 <!DOCTYPE html>
 <html>
@@ -75,30 +74,11 @@ app.get('/api/team_data', (req, res) => {
   });
 });
 
-// Fetch single team data
 app.get('/api/team_data/:id', (req, res) => {
   const id = req.params.id;
   db.get('SELECT * FROM team_data WHERE id = ?', [id], (err, row) => {
     if(err || !row) return res.status(404).json({ error: "Team not found" });
     res.json(row);
-  });
-});
-
-// Update team
-app.post('/api/team_data/:id/update', (req, res) => {
-  const id = req.params.id;
-  const { teamName, coach } = req.body;
-  db.run('UPDATE team_data SET teamName = ?, coach = ? WHERE id = ?', [teamName, coach, id], err => {
-    if(err) return res.status(500).json({ error: 'Update failed' });
-    res.json({ success: true });
-  });
-});
-
-app.post('/api/team_data/:id/delete', (req, res) => {
-  const id = req.params.id;
-  db.run('DELETE FROM team_data WHERE id = ?', [id], err => {
-    if(err) return res.status(500).json({ error: 'Delete failed' });
-    res.json({ success: true });
   });
 });
 
@@ -130,12 +110,54 @@ app.post('/scoutForm', (req, res) => {
     );
 });
 
-// ===== 404 =====
+app.post('/api/team_data/:id/update', (req, res) => {
+  const teamId = req.params.id
+  const teamUpdates = req.body
+
+  sql = `
+    UPDATE team_data SET
+      teamName = ?,
+      teamNumber = ?,
+      robotDimensions = ?,
+      driveTrain = ?,
+      bumpCross = ?,
+      underTrench = ?,
+      pickupGround = ?,
+      pickupPlayer = ?,
+      hang = ?,
+      hangAuto = ?
+    WHERE id = ?
+  `;
+
+  const values = [
+    teamUpdates.teamName,
+    teamUpdates.teamNumber,
+    teamUpdates.robotDimensions,
+    teamUpdates.driveTrain,
+    teamUpdates.bumpCross,
+    teamUpdates.underTrench,
+    teamUpdates.pickupGround,
+    teamUpdates.pickupPlayer,
+    teamUpdates.hang,
+    teamUpdates.hangAuto,
+    teamId
+  ];
+
+  db.run(sql, values, function(err){
+    if(err){
+      console.error(err);
+      return res.status(500).json({ error: "Database update failed" });
+    }
+    res.json({ success: true });
+  });
+})
+
+
 app.use((req, res) => {
   res.status(404).send(page('Not Found', `<h1>404</h1><p>Page not found: ${req.path}</p><a href="/">Home</a>`));
 });
 
-// ===== Start =====
+// start server
 app.listen(PORT, () => console.log(`LoginBuddy running: http://localhost:${PORT}`));
 
   

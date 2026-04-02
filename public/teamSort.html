@@ -2,11 +2,12 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Team Sort</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">        <link rel="stylesheet" href="cssFiles/styles.css" />
-        <link rel="stylesheet" href="cssFiles/teamSort.css" />
+        <link rel="stylesheet" href="cssFiles/teamSort.css">
     </head>
     <body>
         <nav class = "nav">
@@ -17,40 +18,32 @@
             </div>
         </nav>  
         <h1 id="main-title">Team Sort Page</h1>
-        <div class="search-container">
-            <input
-                type="text"
-                id="teamSearch"
-                placeholder="Search team by name or number..."
-            /> 
-         </div>
-        <div class="container2"> 
-            <div class="container-row1">
-                <div class="table-cell">Team Name</div>
-                <div class="table-cell">Team Number</div>
-                <div class="table-cell">Dimensions</div>
-                <div class="table-cell">Drive Train</div>
-                <div class="table-cell">Bump Cross</div>
-                <div class="table-cell">Under Trench</div>
-                <div class="table-cell">Pick up ground</div>
-                <div class="table-cell">Pick up player</div>
-                <div class="table-cell">Hang</div>
-                <div class="table-cell">Hang auto</div>
+        <div class="card">
+            <div class="search-container">
+                <input
+                    type="text"
+                    id="teamSearch"
+                    placeholder="Search team by name or number..."
+                /> 
             </div>
+            <div class="container2"> 
+                <div class="container-row1">
+                    <div class="table-cell">Team Name</div>
+                    <div class="table-cell">Team Number</div>
+                </div>
 
-            <!-- DATA -->
-            <div id="teamRows"></div>
-            <div class="row">
-                <!-- PAGINATION (bottom) -->
-                <div id="pager" class="pager"></div>
-                <div id="meta" class="meta"></div>
+                <div id="teamRows"></div>
+                <div class="row">
+                    <div id="pager" class="pager"></div>
+                    <div id="meta" class="meta"></div>
+                </div>
             </div>
         </div>
         <script>
             const teamSearch = document.getElementById("teamSearch")
 
 
-            // ===== Pagination Globals =====
+            // Pagination Globals
             let parsedData = [];
             let filteredData = null;
             let page = 1;
@@ -91,34 +84,19 @@
                 data.forEach(team => {
                     html += `
                     <div class="container-row" data-id="${team.id}">
-                        <div class="table-cell">
-                            <a href = /team/${team.id}>${team.teamname}</a>
-                        </div
+                        <div class="table-cell">${team.teamName}</div
                         <div class="table-cell">${team.teamNumber}</div>
-                        <div class="table-cell">${team.robotDimensions}</div>
-                        <div class="table-cell">${team.driveTrain}</div>
-                        <div class="table-cell">${team.bumpCross}</div>
-                        <div class="table-cell status-cell">${team.underTrench}</div>
-                        <div class="table-cell status-cell">${team.pickupGround}</div>
-                        <div class="table-cell status-cell">${team.pickupPlayer}</div>
-                        <div class="table-cell status-cell">${team.hang}</div>
-                        <div class="table-cell status-cell">${team.hangAuto}</div>
-                        <div class="table-cell">
-                        <button class="btn edit-btn" data-id="${team.id}">Edit</button>
-                        </div>
+                        <a href="/team-details.html?id=${team.id}">
+                            <button class="btn">View</button>
+                        </a>
                     </div>
                     `;
                 });
 
                 container.innerHTML = html;
-
-                // Reattach edit listeners
-                document.querySelectorAll('.edit-btn').forEach(btn => {
-                    btn.addEventListener('click', enableEditMode); 
-                });
             }
 
-            // ===== Pagination =====
+            //Pagination
             function getPageRows() {
                 let dataSrc;
 
@@ -172,14 +150,14 @@
                 meta.textContent = `Showing ${startRow}-${endRow} of ${parsedData.length}`;
             }
 
-            // ===== Pager Helpers =====
+            // Pager Helpers
             function link(text, pageNum, disabled = false, active = false) {
                 if (disabled) return `<span class="disabled">${text}</span>`;
                 if (active) return `<span class="active">${text}</span>`;
                 return `<a href="#" data-page="${pageNum}">${text}</a>`;
             }
 
-            // ===== Search Feature =====
+            //Search Feature
             teamSearch.addEventListener("input", function() {
                 const searchQuery = teamSearch.value.toLowerCase().trim();
                 
