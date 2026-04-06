@@ -17,3 +17,11 @@
 .row-name {
     color: #FFB915;
 }
+
+input {
+    width: 80%;
+}
+
+select {
+    width: 82.5%;
+}

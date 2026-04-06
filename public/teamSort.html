@@ -53,7 +53,7 @@
             const pager = document.getElementById('pager');
             const meta = document.getElementById('meta');
 
-            // ===== Load Teams =====
+            //Load Teams
             function loadTeam_Data() {
             fetch('/api/team_data')
                 .then(res => res.json())
@@ -87,7 +87,7 @@
                         <div class="table-cell">${team.teamName}</div
                         <div class="table-cell">${team.teamNumber}</div>
                         <a href="/team-details.html?id=${team.id}">
-                            <button class="btn">View</button>
+                            <button class="btn button">View</button>
                         </a>
                     </div>
                     `;

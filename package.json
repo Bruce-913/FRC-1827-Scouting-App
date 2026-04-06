@@ -13,5 +13,8 @@
   "dependencies": {
     "express": "^5.2.1",
     "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.7.4"
   }
 }

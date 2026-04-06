@@ -1,7 +1,6 @@
 body {
   /* font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; */
-  font-family: "Orbitron";
-  background: var(--bg); color: var(--fg);
+  font-family: "Orbitron", cursive;
   background-color: #002147;
   color: #FFB915;
 }
@@ -51,4 +50,19 @@ body {
   background-color: #002a47;
   padding: 1rem; border-radius: 12px;
   box-shadow: 0 2px 8px #214457;
+}
+
+.button {
+  /* background-color: #0b083a;  */
+  background-color: #002147;
+  border: none;
+  border-radius: 30%;
+  color: #FFB915;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }

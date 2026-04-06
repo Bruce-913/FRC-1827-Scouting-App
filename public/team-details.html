@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="cssFiles/styles.css">
+  <link rel="stylesheet" href="cssFiles/scouting.css">
   <link rel="stylesheet" href="cssFiles/teamSort.css">
   <link rel="stylesheet" href="cssFiles/team-details.css">
 </head>
@@ -60,6 +61,14 @@
           <div class="table-cell" id="pickupPlayer"></div>
         </div>
         <div class="container-row">
+          <div class="table-cell row-name">How much fuel can the robot hold: </div>
+          <div class="table-cell" id="fuelCapacity"></div>
+        </div>
+        <div class="container-row">
+          <div class="table-cell row-name">What is the accuracy of the shooter(rough percentage estimate): </div>
+          <div class="table-cell" id="shooterAccuracy"></div>
+        </div>
+        <div class="container-row">
           <div class="table-cell row-name">Can it hang (tele-op) : </div>
           <div class="table-cell" id="hang"></div>
         </div>
@@ -102,6 +111,8 @@
             <option value="no">No</option>
           </select>
         </div>
+        <div class="container-row"><div class ="row-name">How much fuel can the robot hold: </div><input type="text" id="editFuelCapacity"></div>
+        <div class="container-row"><div class ="row-name">What is the accuracy of the shooter(rough percentage estimate): </div><input type="text" id="editShooterAccuracy"></div>
         <div class="container-row"><div class ="row-name">Hang (tele-op): </div>
           <select id="editHang">
             <option value="No hang">No hang</option>
@@ -119,9 +130,9 @@
       </div>
     </div>
 
-    <button id="editBtn">Edit</button>
-    <button id="saveBtn" style="display:none;">Save</button>
-    <button id="cancelBtn" style="display:none;">Cancel</button>
+    <button class="button" id="editBtn">Edit</button>
+    <button class="button" id="saveBtn" style="display:none;">Save</button>
+    <button class="button" id="cancelBtn" style="display:none;">Cancel</button>
   </div>
 </div>
 
@@ -159,6 +170,8 @@
     document.getElementById('underTrench').textContent = teamData.underTrench;
     document.getElementById('pickupGround').textContent = teamData.pickupGround;
     document.getElementById('pickupPlayer').textContent = teamData.pickupPlayer;
+    document.getElementById('fuelCapacity').textContent = teamData.fuelCapacity;
+    document.getElementById('shooterAccuracy').textContent = teamData.shooterAccuracy;
     document.getElementById('hang').textContent = teamData.hang;
     document.getElementById('hangAuto').textContent = teamData.hangAuto;
   }
@@ -177,6 +190,8 @@
     document.getElementById('editUnderTrench').value = teamData.underTrench;
     document.getElementById('editPickupGround').value = teamData.pickupGround;
     document.getElementById('editPickupPlayer').value = teamData.pickupPlayer;
+    document.getElementById('editFuelCapacity').value = teamData.fuelCapacity;
+    document.getElementById('editShooterAccuracy').value = teamData.shooterAccuracy;
     document.getElementById('editHang').value = teamData.hang;
     document.getElementById('editHangAuto').value = teamData.hangAuto;
 
@@ -198,6 +213,8 @@
       underTrench: document.getElementById('editUnderTrench').value,
       pickupGround: document.getElementById('editPickupGround').value,
       pickupPlayer: document.getElementById('editPickupPlayer').value,
+      fuelCapacity: document.getElementById('editFuelCapacity').value,
+      shooterAccuracy: document.getElementById('editShooterAccuracy').value,
       hang: document.getElementById('editHang').value,
       hangAuto: document.getElementById('editHangAuto').value,
     };

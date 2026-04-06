@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //SQLite setup
-const db = new sqlite3.Database('./app.db');
+const db = new sqlite3.Database('/data/app.db');
 db.serialize(() => {  
   // USERS TABLE
   db.run(`CREATE TABLE IF NOT EXISTS team_data (
@@ -19,6 +19,8 @@ db.serialize(() => {
     underTrench TEXT,
     pickupGround TEXT,
     pickupPlayer TEXT,
+    fuelCapacity TEXT,
+    shooterAccuracy TEXT, 
     hang TEXT,
     hangAuto TEXT
     )`
@@ -66,7 +68,7 @@ app.get('/teamSort', (req, res) => {
 });
 
 app.get('/api/team_data', (req, res) => {
-  sql = `SELECT id, teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto
+  sql = `SELECT id, teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, fuelCapacity, shooterAccuracy, hang, hangAuto
   FROM team_data`
   db.all(sql, [], (err, rows) => {
     if (err) return res.status(500).json({ error: 'Database error' });
@@ -83,11 +85,11 @@ app.get('/api/team_data/:id', (req, res) => {
 });
 
 app.post('/scoutForm', (req, res) => {
-    const {teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto} = req.body;
+    const {teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, fuelCapacity, shooterAccuracy, hang, hangAuto} = req.body;
 
     db.run(
-        `INSERT INTO team_data (id, teamName, teamNumber, robotDimensions,driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, hang, hangAuto)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO team_data (id, teamName, teamNumber, robotDimensions,driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, fuelCapacity, shooterAccuracy, hang, hangAuto)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             crypto.randomUUID(),
             teamName,
@@ -98,6 +100,8 @@ app.post('/scoutForm', (req, res) => {
             underTrench,
             pickupGround,
             pickupPlayer,
+            fuelCapacity,
+            shooterAccuracy,
             hang,
             hangAuto
         ],
@@ -114,7 +118,7 @@ app.post('/api/team_data/:id/update', (req, res) => {
   const teamId = req.params.id
   const teamUpdates = req.body
 
-  sql = `
+  let sql = `
     UPDATE team_data SET
       teamName = ?,
       teamNumber = ?,
@@ -124,6 +128,8 @@ app.post('/api/team_data/:id/update', (req, res) => {
       underTrench = ?,
       pickupGround = ?,
       pickupPlayer = ?,
+      fuelCapacity = ?,
+      shooterAccuracy = ?,
       hang = ?,
       hangAuto = ?
     WHERE id = ?
@@ -138,6 +144,8 @@ app.post('/api/team_data/:id/update', (req, res) => {
     teamUpdates.underTrench,
     teamUpdates.pickupGround,
     teamUpdates.pickupPlayer,
+    teamUpdates.fuelCapacity,
+    teamUpdates.shooterAccuracy,
     teamUpdates.hang,
     teamUpdates.hangAuto,
     teamId
