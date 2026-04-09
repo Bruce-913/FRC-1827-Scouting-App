@@ -15,8 +15,7 @@
 <body>
 <nav class = "nav">
   <div>
-    <a href="/">Home Page</a>
-    <a href="/scouting">Scouting</a>
+    <a href="/">Scouting</a>
     <a href="/teamSort" aria-current="page">Team Sorting</a>
   </div>
   <!-- <a href="/teamSort">Back</a> -->
@@ -129,6 +128,12 @@
         </div>
       </div>
     </div>
+    <div>
+      <small id="deleteHint" style="display: none;">Are you sure you want to delete all of this teams data ? </small>
+      <button id="deleteBtn" class="btn button">Delete</button>
+      <button id="confirmDeleteBtn" class="btn button" style="display:none;">Confirm delete</button>
+      <button id="cancelDeleteBtn" class="btn button" style="display: none">Cancel</button>
+    </div>
 
     <button class="button" id="editBtn">Edit</button>
     <button class="button" id="saveBtn" style="display:none;">Save</button>
@@ -145,6 +150,11 @@
   const editBtn = document.getElementById('editBtn')
   const saveBtn = document.getElementById('saveBtn')
   const cancelBtn = document.getElementById('cancelBtn')
+
+  const deleteHint = document.getElementById('deleteHint')
+  const deleteBtn = document.getElementById('deleteBtn')
+  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn')
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 
   const teamDisplay = document.getElementById('teamDisplay')
   const editTeam = document.getElementById('editTeam')
@@ -240,6 +250,39 @@
     cancelBtn.style.display = 'none'
 
     renderteamData()
+  }
+
+  deleteBtn.addEventListener('click', deleteEnable);
+  confirmDeleteBtn.addEventListener('click', deleteTeamFn)
+  cancelDeleteBtn.addEventListener('click', cancelDelete)
+            
+  function deleteEnable() {
+    deleteHint.textContent = `Are you sure you want to delete all of ${teamData.teamName}'s data ?`;
+
+    deleteBtn.style.display = 'none';
+    confirmDeleteBtn.style.display = 'inline';
+    deleteHint.style.display = 'inline'
+    cancelDeleteBtn.style.display = 'inline'
+  }
+
+  function cancelDelete() {
+    deleteBtn.style.display = 'inline';
+    confirmDeleteBtn.style.display = 'none';
+    deleteHint.style.display = 'none';
+    cancelDeleteBtn.style.display = 'none';
+  }
+
+  function deleteTeamFn() {
+    fetch(`/api/team_data/${teamId}`, {
+      method: 'DELETE'
+    })
+    .then(res => res.text())
+    .then(data => {
+      console.log(data)
+      alert("Team should be deleted now:)")
+      window.location.href = '/teamSort'
+    });    
+    
   }
 
 </script>

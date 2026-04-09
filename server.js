@@ -5,10 +5,14 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-//SQLite setup
-const db = new sqlite3.Database('/data/app.db');
+const fs = require('fs');
+const dbDir = process.env.NODE_ENV === 'production' ? '/data' : '.';
+if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
+// SQL setup
+const dbPath = process.env.NODE_ENV === 'production' ? '/data/app.db' : './app.db';
+const db = new sqlite3.Database(dbPath);
 db.serialize(() => {  
-  // USERS TABLE
+  // team_data TABLE
   db.run(`CREATE TABLE IF NOT EXISTS team_data (
     id TEXT PRIMARY KEY,
     teamName TEXT,
@@ -44,8 +48,7 @@ const page = (title, body) => `
 <body>
   <nav class="nav">
     <div class="links">
-      <a href="/">Home</a>
-      <a href="/scouting">Scouting</a>
+      <a href="/">Scouting</a>
       <a href="/teamSort">Teams</a>
     </div>
   </nav>
@@ -55,11 +58,11 @@ const page = (title, body) => `
 `;
 
     /* |Page Routing| */
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/homePage.html'))
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'public/homePage.html'))
+// });
 
-app.get('/scouting', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/scouting.html'))
 });
 
@@ -68,7 +71,7 @@ app.get('/teamSort', (req, res) => {
 });
 
 app.get('/api/team_data', (req, res) => {
-  sql = `SELECT id, teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, fuelCapacity, shooterAccuracy, hang, hangAuto
+  const sql = `SELECT id, teamName, teamNumber, robotDimensions, driveTrain, bumpCross, underTrench, pickupGround, pickupPlayer, fuelCapacity, shooterAccuracy, hang, hangAuto
   FROM team_data`
   db.all(sql, [], (err, rows) => {
     if (err) return res.status(500).json({ error: 'Database error' });
@@ -160,9 +163,22 @@ app.post('/api/team_data/:id/update', (req, res) => {
   });
 })
 
+app.delete('/api/team_data/:id/', (req, res) => {
+  const teamId = req.params.id
+
+  const sql = `DELETE FROM team_data WHERE id = ?`
+
+  db.run(sql, [teamId], function(err) {
+    if(err) {
+      console.error(err.message)
+      return res.status(500).send("There was an error when deleting team_data row")
+    }
+    res.send("team delete successfully!")
+  })
+})
 
 app.use((req, res) => {
-  res.status(404).send(page('Not Found', `<h1>404</h1><p>Page not found: ${req.path}</p><a href="/">Home</a>`));
+  res.status(404).send(page('Not Found', `<h1>404</h1><p>Page not found: ${req.path}</p><a href="/">Return to scouting form</a>`));
 });
 
 // start server
